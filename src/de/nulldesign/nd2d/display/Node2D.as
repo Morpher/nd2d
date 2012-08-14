@@ -832,14 +832,18 @@ package de.nulldesign.nd2d.display {
 		 * @return
 		 */
 		protected function hitTest():Boolean {
-			if(isNaN(_width) || isNaN(_height)) {
+			// even faster isNaN()	http://jacksondunstan.com/articles/983
+			if(_width != _width || _height != _height) {
 				return false;
 			}
 
 			var halfWidth:Number = _width >> 1;
 			var halfHeight:Number = _height >> 1;
 
-			return (_mouseX >= -halfWidth && _mouseX <= halfWidth && _mouseY >= -halfHeight && _mouseY <= halfHeight);
+			return _mouseX >= -halfWidth
+				&& _mouseX <= halfWidth
+				&& _mouseY >= -halfHeight
+				&& _mouseY <= halfHeight;
 		}
 
 		internal function setReferences(stage:Stage, camera:Camera2D, world:World2D, scene:Scene2D):void {

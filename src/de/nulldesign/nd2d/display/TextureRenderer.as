@@ -69,7 +69,8 @@ package de.nulldesign.nd2d.display {
 			context.setRenderToTexture(texture.getTexture(context), false, world.antiAliasing, 0);
 			context.clear(0.0, 0.0, 0.0, 0.0);
 
-			if(!isNaN(cameraOffsetX) && !isNaN(cameraOffsetY)) {
+			// even faster isNotNaN()	http://jacksondunstan.com/articles/983
+			if(cameraOffsetX == cameraOffsetX && cameraOffsetY == cameraOffsetY) {
 				texCamera.x = cameraOffsetX;
 				texCamera.y = cameraOffsetY;
 			} else {
