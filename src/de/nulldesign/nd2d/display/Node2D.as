@@ -174,6 +174,7 @@ package de.nulldesign.nd2d.display {
 
 		/**
 		 * Currently only used by Sprite2DCloud
+		 *
 		 * @private
 		 */
 		public var invalidateUV:Boolean = true;
@@ -181,6 +182,7 @@ package de.nulldesign.nd2d.display {
 		/**
 		 * Currently only used by Sprite2DCloud
 		 * We use it as the lite version of invalidateColors
+		 *
 		 * @private
 		 */
 		public var invalidateVisibility:Boolean = true;
@@ -764,9 +766,9 @@ package de.nulldesign.nd2d.display {
 		internal function processMouseEvent(mousePosition:Vector3D, mouseEventType:String, cameraViewProjectionMatrix:Matrix3D, isTouchEvent:Boolean, touchPointID:int):Node2D {
 			var result:Node2D = null;
 
-			mouseEvents.length = 0;
-
 			if(mouseEnabled && mouseEventType) {
+				mouseEvents.length = 0;
+
 				// transform mousepos to local coordinate system
 				localMouseMatrix.identity();
 				localMouseMatrix.append(worldModelMatrix);
@@ -782,6 +784,8 @@ package de.nulldesign.nd2d.display {
 				var newMouseInNode:Boolean = hitTest();
 
 				if(newMouseInNode) {
+					result = this;
+
 					if(!oldMouseInNodeState) {
 						if(isTouchEvent) {
 							mouseEvents.push(new TouchEvent(TouchEvent.TOUCH_OVER, false, false, touchPointID, false, localMouse.x, localMouse.y));
@@ -795,9 +799,6 @@ package de.nulldesign.nd2d.display {
 					} else {
 						mouseEvents.push(new MouseEvent(mouseEventType, false, false, localMouse.x, localMouse.y, null, false, false, false, (mouseEventType == MouseEvent.MOUSE_DOWN), 0));
 					}
-
-					result = this;
-
 				} else if(oldMouseInNodeState) {
 					// dispatch mouse out directly, no hierarchy test
 					if(isTouchEvent) {
@@ -806,22 +807,22 @@ package de.nulldesign.nd2d.display {
 						dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OUT, false, false, localMouse.x, localMouse.y, null, false, false, false, (mouseEventType == MouseEvent.MOUSE_DOWN), 0));
 					}
 				}
-			}
 
-			var subChildMouseNode:Node2D;
+				var subChildMouseNode:Node2D;
 
-			for(var child:Node2D = childLast; child; child = child.prev) {
-				subChildMouseNode = child.processMouseEvent(mousePosition, mouseEventType, cameraViewProjectionMatrix, isTouchEvent, touchPointID);
+				for(var child:Node2D = childLast; child; child = child.prev) {
+					subChildMouseNode = child.processMouseEvent(mousePosition, mouseEventType, cameraViewProjectionMatrix, isTouchEvent, touchPointID);
 
-				if(subChildMouseNode) {
-					result = subChildMouseNode;
-					break;
+					if(subChildMouseNode) {
+						result = subChildMouseNode;
+						break;
+					}
 				}
-			}
 
-			// set over to false, if one of our childs stole the event
-			if(result != this) {
-				mouseInNode = false;
+				// set over to false, if one of our childs stole the event
+				if(result != this) {
+					mouseInNode = false;
+				}
 			}
 
 			return result;
