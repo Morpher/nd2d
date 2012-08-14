@@ -325,7 +325,11 @@ package de.nulldesign.nd2d.display {
 
 			switch(_type) {
 				case TextFieldType.DYNAMIC:  {
-					// Draw textfield onto bitmap data.
+					if(_textTexture) {
+						_textTexture.dispose();
+					}
+
+					// draw textfield onto bitmap data
 					_textBitmapData = new BitmapData(
 						_nativeTextField.width + _borderPadding,
 						_nativeTextField.height + _borderPadding,
@@ -334,26 +338,17 @@ package de.nulldesign.nd2d.display {
 
 					_textBitmapData.draw(_nativeTextField);
 
-					if(_textTexture) {
-						_textTexture.dispose();
-					}
-
 					_textTexture = Texture2D.textureFromBitmapData(_textBitmapData);
 					setTexture(_textTexture);
 
-					// Set pivot to top left corner because it's better for laying out text than a center pivot point.
-					// NOTE: Rounding with int() because blurryness can occur if x/y values for pivot are not whole numbers.
+					// NOTE: we cast to int because blurriness can occur if x/y values are not whole numbers
 					switch(align) {
 						case TextFormatAlign.LEFT:  {
-							pivot = new Point(int(-_nativeTextField.width / 2), /*int(-_nativeTextField.height / 2)*/ 0.0);
-							break;
-						}
-						case TextFormatAlign.CENTER:  {
-							pivot = new Point(0.0, /*int(-_nativeTextField.height / 2)*/ 0.0);
+							pivot = new Point(-_nativeTextField.width >> 1, 0.0);
 							break;
 						}
 						case TextFormatAlign.RIGHT:  {
-							pivot = new Point(int(_nativeTextField.width / 2), /*int(-_nativeTextField.height / 2)*/ 0.0);
+							pivot = new Point(_nativeTextField.width >> 1, 0.0);
 							break;
 						}
 					}
@@ -388,14 +383,16 @@ package de.nulldesign.nd2d.display {
 		}
 
 		override public function dispose():void {
-			_textTexture.dispose();
-			_textTexture = null;
-
-			_textBitmapData.dispose();
-			_textBitmapData = null;
+			if(_textTexture) {
+				_textTexture.dispose();
+				_textTexture = null;
+				_textBitmapData = null;
+			} else if(_textBitmapData) {
+				_textBitmapData.dispose();
+				_textBitmapData = null;
+			}
 
 			_textFormat = null;
-
 			_nativeTextField = null;
 
 			super.dispose();
