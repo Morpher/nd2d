@@ -137,6 +137,11 @@ package de.nulldesign.nd2d.display {
 		protected var mVertexBuffer:Vector.<Number>;
 		protected var mIndexBuffer:Vector.<uint>;
 
+		protected var _static:Boolean = false;
+
+		protected var staticIdx:uint = 0;
+		protected var staticLast:Node2D = null;
+
 		protected var lastUsesUV:Boolean = false;
 		protected var lastUsesColor:Boolean = false;
 		protected var lastUsesColorOffset:Boolean = false;
@@ -161,6 +166,44 @@ package de.nulldesign.nd2d.display {
 			mIndexBuffer = new Vector.<uint>(maxCapacity * 6, true);
 		}
 
+		public function get static():Boolean {
+			return _static;
+		}
+
+		/**
+		 * If <code>true</code>, makes this container really static. Childs can
+		 * still be added but any changes you apply to them, like position, color,
+		 * alpha etc. will not be visible.
+		 *
+		 * <p>This allows you to display a huge amount of static sprites at
+		 * virtually no (CPU) cost. Works best if GPU is faster than CPU
+		 * (dektop).</p>
+		 *
+		 * @see invalidateStatic()
+		 */
+		public function set static(value:Boolean):void {
+			_static = value;
+
+			invalidateStatic();
+		}
+
+		/**
+		 * If <code>static</code> is set, this will force an invalidation of all
+		 * childs to update their current state like position, color, alpha, etc.
+		 *
+		 * <p>This function call is expensive but has no effect if
+		 * <code>static</code> is <code>false</code>.</p>
+		 *
+		 * @see static
+		 */
+		public function invalidateStatic():void {
+			staticIdx = 0;
+			staticLast = childFirst;
+		}
+
+		/**
+		 * @private
+		 */
 		public function invalidateChilds(child:Node2D):void {
 			for(var node:Node2D = child; node; node = node.next) {
 				node.invalidateUV = true;
@@ -191,6 +234,13 @@ package de.nulldesign.nd2d.display {
 		}
 
 		override public function removeChild(child:Node2D):void {
+			if(child == childLast) {
+				staticIdx -= numFloatsPerVertex * 4;
+				staticLast = child.prev;
+			} else {
+				invalidateStatic();
+			}
+
 			invalidateChilds(child.next);
 
 			super.removeChild(child);
@@ -199,17 +249,24 @@ package de.nulldesign.nd2d.display {
 		override public function insertChildBefore(child1:Node2D, child2:Node2D):void {
 			super.insertChildBefore(child1, child2);
 
+			invalidateStatic();
 			invalidateChilds(child1);
 		}
 
 		override public function insertChildAfter(child1:Node2D, child2:Node2D):void {
 			super.insertChildAfter(child1, child2);
 
+			if(child1 != childLast) {
+				invalidateStatic();
+			}
+
 			invalidateChilds(child1);
 		}
 
 		override public function swapChildren(child1:Node2D, child2:Node2D):void {
 			super.swapChildren(child1, child2);
+
+			invalidateStatic();
 
 			child1.invalidateUV = true;
 			child1.invalidateMatrix = true;
@@ -284,7 +341,14 @@ package de.nulldesign.nd2d.display {
 			const halfTextureWidth:Number = texture.bitmapWidth >> 1;
 			const halfTextureHeight:Number = texture.bitmapHeight >> 1;
 
-			for(node = childFirst; node; node = node.next) {
+			if(_static && staticLast) {
+				vIdx = staticIdx;
+				node = staticLast.next;
+			} else {
+				node = childFirst;
+			}
+
+			for(; node; node = node.next) {
 				child = node as Sprite2D;
 
 				node.step(elapsed);
@@ -445,6 +509,10 @@ package de.nulldesign.nd2d.display {
 				}
 
 				vIdx += numFloatsPerVertex * 4;
+
+				// update static references
+				staticIdx = vIdx;
+				staticLast = node;
 
 				child.invalidateUV = false;
 				child.invalidateMatrix = false;

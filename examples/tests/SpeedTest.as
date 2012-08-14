@@ -31,7 +31,6 @@
 package tests {
 
 	import com.bit101.components.ComboBox;
-	import com.bit101.components.Style;
 
 	import de.nulldesign.nd2d.display.Node2D;
 	import de.nulldesign.nd2d.display.Scene2D;
@@ -68,6 +67,7 @@ package tests {
 		private var isIndividual:Boolean;
 
 		private var isStatic:Boolean;
+		private var isRealStatic:Boolean;
 		private var isAnimated:Boolean;
 		private var isMoving:Boolean;
 
@@ -86,6 +86,7 @@ package tests {
 				"   Sprite2D (animated)",
 				"   Sprite2D (moving)",
 				"Sprite2DCloud (static)",
+				"   Sprite2DCloud (real static)",
 				"   Sprite2DCloud (animated)",
 				"   Sprite2DCloud (moving)",
 				"Sprite2DBatch (static)",
@@ -97,7 +98,7 @@ package tests {
 				"Clear"]);
 			comboBox.width = 150;
 			comboBox.addEventListener(Event.SELECT, onTestSelect);
-			comboBox.numVisibleItems = 13;
+			comboBox.numVisibleItems = 14;
 
 			// don't dispose this bitmap and sheet when we dispose the childs but always
 			// remember to manually dispose it when no longer needed (see dispose function below)
@@ -146,34 +147,42 @@ package tests {
 
 			isCloud = selectedIndex == 3
 				|| selectedIndex == 4
-				|| selectedIndex == 5;
+				|| selectedIndex == 5
+				|| selectedIndex == 6;
 
-			isBatch = selectedIndex == 6
-				|| selectedIndex == 7
-				|| selectedIndex == 8;
+			isBatch = selectedIndex == 7
+				|| selectedIndex == 8
+				|| selectedIndex == 9;
 
-			isIndividual = selectedIndex == 9
-				|| selectedIndex == 10
-				|| selectedIndex == 11;
+			isIndividual = selectedIndex == 10
+				|| selectedIndex == 11
+				|| selectedIndex == 12;
 
 			isStatic = selectedIndex == 0
 				|| selectedIndex == 3
-				|| selectedIndex == 6
-				|| selectedIndex == 9;
-
-			isAnimated = selectedIndex == 1
 				|| selectedIndex == 4
 				|| selectedIndex == 7
 				|| selectedIndex == 10;
 
-			isMoving = selectedIndex == 2
+			isRealStatic = selectedIndex == 4;
+
+			isAnimated = selectedIndex == 1
 				|| selectedIndex == 5
 				|| selectedIndex == 8
 				|| selectedIndex == 11;
 
+			isMoving = selectedIndex == 2
+				|| selectedIndex == 6
+				|| selectedIndex == 9
+				|| selectedIndex == 12;
+
 			if(isCloud) {
 				spriteCloud = new Sprite2DCloud(maxCloudSize, tex);
 				addChild(spriteCloud);
+
+				if(isRealStatic) {
+					spriteCloud.static = true;
+				}
 			} else if(isBatch) {
 				spriteBatch = new Sprite2DBatch(tex);
 				addChild(spriteBatch);
@@ -187,7 +196,7 @@ package tests {
 			// faster to move the camera instead of hundreds of sprites
 			camera.x = Math.cos(world.timeSinceStartInSeconds) * 50;
 
-			if(Statistics.fps >= stage.frameRate) {
+			if(Statistics.fps >= stage.frameRate && Statistics.sprites < (isShared || isIndividual ? 4096 : 600000)) {
 				var sprite:Sprite2D;
 
 				for(var i:uint = 0; i < spritesPerFrame; i++) {
@@ -198,6 +207,10 @@ package tests {
 						if(spriteCloud.numChildren >= maxCloudSize) {
 							spriteCloud = new Sprite2DCloud(maxCloudSize, tex);
 							addChild(spriteCloud);
+
+							if(isRealStatic) {
+								spriteCloud.static = true;
+							}
 						}
 
 						sprite = new Sprite2D();
@@ -227,6 +240,12 @@ package tests {
 
 						if(isAnimated) {
 							sprite.animation.play("blah", 1000 * Math.random(), 1 + 4 * Math.random());
+						} else {
+							sprite.animation.frame = 1000 * Math.random();
+						}
+
+						if(isMoving) {
+							sprite.rotation = 360 * Math.random();
 						}
 					}
 				}
