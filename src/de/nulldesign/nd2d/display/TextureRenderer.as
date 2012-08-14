@@ -65,7 +65,7 @@ package de.nulldesign.nd2d.display {
 			texture.texture = null;
 		}
 
-		override internal function drawNode(context:Context3D, camera:Camera2D):void {
+		override internal function drawNode(context:Context3D, camera:Camera2D, elapsed:Number):void {
 			context.setRenderToTexture(texture.getTexture(context), false, world.antiAliasing, 0);
 			context.clear(0.0, 0.0, 0.0, 0.0);
 
@@ -80,7 +80,7 @@ package de.nulldesign.nd2d.display {
 
 			var visibleState:Boolean = renderNode.visible;
 			renderNode.visible = true;
-			renderNode.drawNode(context, texCamera);
+			renderNode.drawNode(context, texCamera, elapsed);
 			renderNode.visible = visibleState;
 
 			context.setRenderToBackBuffer();

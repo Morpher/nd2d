@@ -78,7 +78,7 @@ package tests {
 			starfield2.uvScaleY = starfield1.scaleY;
 		}
 
-		override protected function step(elapsed:Number):void {
+		override public function step(elapsed:Number):void {
 			starfield1.uvOffsetX -= (stage.stageWidth * 0.5 - mouseX) * 0.00002;
 			starfield1.uvOffsetY -= (stage.stageHeight * 0.5 - mouseY) * 0.00002;
 			starfield2.uvOffsetX -= (stage.stageWidth * 0.5 - mouseX) * 0.00004;

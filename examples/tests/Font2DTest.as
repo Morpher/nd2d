@@ -73,7 +73,7 @@ package tests {
 			addChild(counter);
 		}
 
-		override protected function step(elapsed:Number):void {
+		override public function step(elapsed:Number):void {
 			counter.x = stage.stageWidth * 0.5;
 			counter.y = 20.0;
 			counter.text = String(getTimer());
@@ -88,11 +88,11 @@ package tests {
 			var i:uint = 0;
 
 			for(var n:Node2D = font.childFirst; n; n = n.next, i++) {
-				n.y = Math.sin(i * 0.5 + timeSinceStartInSeconds * 2.0) * 40.0;
+				n.y = Math.sin(i * 0.5 + world.timeSinceStartInSeconds * 2.0) * 40.0;
 				n.rotation = n.y;
 
 				if(i == 50) {
-					n.tint = ColorUtil.mixColors(0xff0000, 0x00ff00, NumberUtil.sin(timeSinceStartInSeconds));
+					n.tint = ColorUtil.mixColors(0xff0000, 0x00ff00, NumberUtil.sin(world.timeSinceStartInSeconds));
 				}
 			}
 		}

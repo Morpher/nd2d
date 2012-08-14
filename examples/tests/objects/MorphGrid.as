@@ -43,7 +43,7 @@ package tests.objects {
 			super(stepsX, stepsY, textureObject);
 		}
 
-		override protected function step(elapsed:Number):void {
+		override public function step(elapsed:Number):void {
 			var yPos:uint;
 			var xPos:uint;
 
@@ -53,16 +53,14 @@ package tests.objects {
 			var v:Vertex;
 
 			for(var i:int = 0; i < vertexList.length; i++) {
-
 				yPos = Math.floor(i / (stepsX + 1));
 				xPos = i % (stepsY + 1);
 
 				v = vertexList[i];
 
 				if(xPos > 0 && yPos > 0 && xPos < stepsX && yPos < stepsY) {
-
-					newX = v.x + v.x * Math.sin(v.length * 10.0 + timeSinceStartInSeconds * 2.0) * strength;
-					newY = v.y + v.y * Math.cos(v.length * 10.0 + timeSinceStartInSeconds * 2.0) * strength;
+					newX = v.x + v.x * Math.sin(v.length * 10.0 + world.timeSinceStartInSeconds * 2.0) * strength;
+					newY = v.y + v.y * Math.cos(v.length * 10.0 + world.timeSinceStartInSeconds * 2.0) * strength;
 
 					material.modifyVertexInBuffer(v.bufferIdx, newX, newY);
 				}

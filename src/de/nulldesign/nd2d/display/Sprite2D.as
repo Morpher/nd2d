@@ -119,15 +119,12 @@ package de.nulldesign.nd2d.display {
 			}
 		}
 
-		/**
-		 * @private
-		 */
-		override internal function stepNode(elapsed:Number, timeSinceStartInSeconds:Number):void {
-			super.stepNode(elapsed, timeSinceStartInSeconds);
-
-			if(texture && texture.sheet) {
+		override public function step(elapsed:Number):void {
+			if(!culled && texture && texture.sheet) {
 				animation.update(elapsed);
 			}
+
+			super.step(elapsed);
 		}
 
 		override public function draw(context:Context3D, camera:Camera2D):void {

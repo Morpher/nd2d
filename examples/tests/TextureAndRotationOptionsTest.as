@@ -85,7 +85,9 @@ package tests {
 
 			var slider:HUISlider;
 
-			Style.LABEL_TEXT = 0xFFFFFF;
+			var oldStyle:uint = Style.LABEL_TEXT;
+
+			Style.LABEL_TEXT = 0xffffff;
 
 			slider = new HUISlider(container, 0, 130, "uvOffsetX", sliderChanged);
 			slider.minimum = -2.0;
@@ -117,7 +119,7 @@ package tests {
 			slider.maximum = 360.0;
 			slider.value = 0.0;
 
-			Style.LABEL_TEXT = 0x000000;
+			Style.LABEL_TEXT = oldStyle;
 
 			mipMapComboBox = new ComboBox(container, 10, 210, "mipmapping", ["mipdisable", "mipnearest", "miplinear"]);
 			mipMapComboBox.width = 120;
@@ -243,7 +245,7 @@ package tests {
 			}
 		}
 
-		override protected function step(elapsed:Number):void {
+		override public function step(elapsed:Number):void {
 			if(sprite && batch && cloud) {
 				sprite.rotation += 0.2;
 				batch.childFirst.rotation += 0.2;
@@ -264,6 +266,5 @@ package tests {
 			textureComboBox = null;
 			filteringComboBox = null;
 		}
-
 	}
 }

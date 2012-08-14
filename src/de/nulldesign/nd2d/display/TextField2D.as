@@ -372,7 +372,7 @@ package de.nulldesign.nd2d.display {
 			_needsRedraw = false;
 		}
 
-		override protected function step(elapsed:Number):void {
+		override public function step(elapsed:Number):void {
 			if(_needsRedraw) {
 				redraw();
 			}

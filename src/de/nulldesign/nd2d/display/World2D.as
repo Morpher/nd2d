@@ -78,7 +78,10 @@ package de.nulldesign.nd2d.display {
 	public class World2D extends Sprite {
 
 		public var antiAliasing:uint = 0;
+		public var depthAndStencil:Boolean = false;
 		public var enableErrorChecking:Boolean = false;
+
+		public var timeSinceStartInSeconds:Number = 0.0;
 
 		protected var camera:Camera2D = new Camera2D(1, 1);
 		protected var context3D:Context3D;
@@ -237,23 +240,25 @@ package de.nulldesign.nd2d.display {
 			}
 
 			var rect:Rectangle = bounds ? bounds : new Rectangle(0, 0, stage.stageWidth, stage.stageHeight);
+
+			if(!rect.width || !rect.height) {
+				return;
+			}
+
 			stage.stage3Ds[stageID].x = rect.x;
 			stage.stage3Ds[stageID].y = rect.y;
 
-			context3D.configureBackBuffer(rect.width, rect.height, antiAliasing, false);
+			context3D.configureBackBuffer(rect.width, rect.height, antiAliasing, depthAndStencil);
 			camera.resizeCameraStage(rect.width, rect.height);
 		}
 
 		protected function mainLoop(e:Event):void {
-			var timeSinceStartInSeconds:Number = getTimer() * 0.001;
+			timeSinceStartInSeconds = getTimer() * 0.001;
+
 			var elapsed:Number = timeSinceStartInSeconds - lastFramesTime;
 
 			if(scene && context3D && context3D.driverInfo != "Disposed") {
 				context3D.clear(scene.br, scene.bg, scene.bb, 1.0);
-
-				if(!isPaused) {
-					scene.stepNode(elapsed, timeSinceStartInSeconds);
-				}
 
 				if(deviceWasLost) {
 					ShaderCache.handleDeviceLoss();
@@ -266,7 +271,7 @@ package de.nulldesign.nd2d.display {
 
 				Statistics.reset();
 
-				scene.drawNode(context3D, camera);
+				scene.drawNode(context3D, camera, isPaused ? 0 : elapsed);
 
 				context3D.present();
 			}
@@ -283,6 +288,7 @@ package de.nulldesign.nd2d.display {
 
 			if(scene) {
 				scene.setReferences(stage, camera, this, scene);
+				scene.step(0);
 			}
 		}
 

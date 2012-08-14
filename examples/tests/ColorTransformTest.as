@@ -137,9 +137,9 @@ package tests {
 			spriteWithMask.setMask(maskSprite2);
 		}
 
-		override protected function step(elapsed:Number):void {
-			maskSprite1.y = 200.0 + Math.sin(timeSinceStartInSeconds * 2.0) * 20.0;
-			maskSprite2.y = 240.0 + Math.sin(timeSinceStartInSeconds * 2.0) * 20.0;
+		override public function step(elapsed:Number):void {
+			maskSprite1.y = 200.0 + Math.sin(world.timeSinceStartInSeconds * 2.0) * 20.0;
+			maskSprite2.y = 240.0 + Math.sin(world.timeSinceStartInSeconds * 2.0) * 20.0;
 		}
 
 		protected function addedToStage(event:Event):void {
@@ -149,11 +149,13 @@ package tests {
 
 			panel = new Sprite();
 			panel.y = 280.0;
-			panel.graphics.beginFill(0x000000, 1.0);
-			panel.graphics.drawRect(0.0, 0.0, 180.0, 160.0);
+			panel.graphics.beginFill(0x000000, 0.6);
+			panel.graphics.drawRoundRect(0, 0, 180, 160, 10);
 			panel.graphics.endFill();
 
-			Style.LABEL_TEXT = 0xFFFFFF;
+			var oldStyle:uint = Style.LABEL_TEXT;
+
+			Style.LABEL_TEXT = 0xffffff;
 
 			c = new HUISlider(panel, 0, 0, "redMultiplier", changeHandler);
 			c.minimum = 0.0;
@@ -210,6 +212,8 @@ package tests {
 			c.value = 0.0;
 
 			sliders.push(c);
+
+			Style.LABEL_TEXT = oldStyle;
 
 			stage.addChild(panel);
 		}

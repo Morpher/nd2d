@@ -33,11 +33,11 @@ package tests {
 			addChild(txt);
 		}
 
-		override protected function step(elapsed:Number):void {
+		override public function step(elapsed:Number):void {
 			txt.x = stage.stageWidth >> 1;
 			txt.y = stage.stageHeight >> 1;
 			txt.rotation += 50 * elapsed;
-			txt.scale = NumberUtil.sin(timeSinceStartInSeconds, 0.25, 1);
+			txt.scale = NumberUtil.sin(world.timeSinceStartInSeconds, 0.25, 1);
 
 			lastUpdate += elapsed;
 

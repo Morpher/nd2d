@@ -249,7 +249,7 @@ package tests {
 			backgroundSprites2.childFirst.addChild(plasma);
 		}
 
-		override protected function step(elapsed:Number):void {
+		override public function step(elapsed:Number):void {
 			var node:Node2D;
 
 			scrollX = -(mouseX - camera.sceneWidth * 0.5) * 0.05;

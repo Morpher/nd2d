@@ -81,23 +81,13 @@ package de.nulldesign.nd2d.display {
 			invalidateMatrix = false;
 		}
 
-		override internal function stepNode(elapsed:Number, timeSinceStartInSeconds:Number):void {
-			this.timeSinceStartInSeconds = timeSinceStartInSeconds;
-
+		override internal function drawNode(context:Context3D, camera:Camera2D, elapsed:Number):void {
 			for(var child:Node2D = childFirst; child; child = child.next) {
-				child.stepNode(elapsed, timeSinceStartInSeconds);
+				child.drawNode(context, camera, elapsed);
 			}
 
 			// call step() after all nodes have finished updating their positions. removes camera stuttering issue
 			step(elapsed);
-
-			sceneGUILayer.stepNode(elapsed, timeSinceStartInSeconds);
-		}
-
-		override internal function drawNode(context:Context3D, camera:Camera2D):void {
-			for(var child:Node2D = childFirst; child; child = child.next) {
-				child.drawNode(context, camera);
-			}
 
 			// resize GUI camera if needed
 			if(sceneGUICamera.sceneWidth != camera.sceneWidth) {
@@ -105,7 +95,7 @@ package de.nulldesign.nd2d.display {
 			}
 
 			// draw GUI layer
-			sceneGUILayer.drawNode(context, sceneGUICamera);
+			sceneGUILayer.drawNode(context, sceneGUICamera, elapsed);
 		}
 
 		override internal function processMouseEvent(mousePosition:Vector3D, mouseEventType:String, cameraViewProjectionMatrix:Matrix3D, isTouchEvent:Boolean, touchPointID:int):Node2D {
@@ -150,6 +140,5 @@ package de.nulldesign.nd2d.display {
 
 			sceneGUICamera = null;
 		}
-
 	}
 }

@@ -70,7 +70,7 @@ package tests {
 			addChild(texturedGrid);
 		}
 
-		override protected function step(elapsed:Number):void {
+		override public function step(elapsed:Number):void {
 			sprite.x = stage.stageWidth * 0.5 - sprite.width * 0.55;
 			sprite.y = stage.stageHeight * 0.5;
 

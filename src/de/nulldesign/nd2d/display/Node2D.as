@@ -218,8 +218,6 @@ package de.nulldesign.nd2d.display {
 
 		public var boundingSphereRadius:Number;
 
-		protected var timeSinceStartInSeconds:Number = 0.0;
-
 		protected var camera:Camera2D;
 
 		private var localMouse:Vector3D;
@@ -887,23 +885,12 @@ package de.nulldesign.nd2d.display {
 		/**
 		 * @private
 		 */
-		internal function stepNode(elapsed:Number, timeSinceStartInSeconds:Number):void {
-			this.timeSinceStartInSeconds = timeSinceStartInSeconds;
-
-			step(elapsed);
-
-			for(var child:Node2D = childFirst; child; child = child.next) {
-				child.stepNode(elapsed, timeSinceStartInSeconds);
-			}
-		}
-
-		/**
-		 * @private
-		 */
-		internal function drawNode(context:Context3D, camera:Camera2D):void {
+		internal function drawNode(context:Context3D, camera:Camera2D, elapsed:Number):void {
 			if(!_visible) {
 				return;
 			}
+
+			step(elapsed);
 
 			if(invalidateUV) {
 				updateUV();
@@ -932,7 +919,7 @@ package de.nulldesign.nd2d.display {
 			draw(context, camera);
 
 			for(var child:Node2D = childFirst; child; child = child.next) {
-				child.drawNode(context, camera);
+				child.drawNode(context, camera, elapsed);
 			}
 
 			invalidateMatrix = false;
@@ -942,7 +929,7 @@ package de.nulldesign.nd2d.display {
 			// override in extended classes
 		}
 
-		protected function step(elapsed:Number):void {
+		public function step(elapsed:Number):void {
 			// override in extended classes
 		}
 

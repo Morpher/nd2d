@@ -33,6 +33,7 @@ package tests {
 	import de.nulldesign.nd2d.display.Scene2D;
 	import de.nulldesign.nd2d.display.Sprite2D;
 	import de.nulldesign.nd2d.materials.texture.Texture2D;
+	import de.nulldesign.nd2d.utils.NumberUtil;
 
 	public class MaskTest extends Scene2D {
 		[Embed(source="/assets/crate.jpg")]
@@ -62,7 +63,7 @@ package tests {
 			sprite2.setMask(mask);
 		}
 
-		override protected function step(elapsed:Number):void {
+		override public function step(elapsed:Number):void {
 			super.step(elapsed);
 
 			sprite.x = camera.sceneWidth * 0.5;
@@ -75,8 +76,8 @@ package tests {
 
 			mask.x = mouseX;
 			mask.y = mouseY;
-			//mask.alpha = NumberUtil.sin0_1(getTimer() / 500.0);
-			//mask.rotation += 4.0;
+			mask.scaleY = NumberUtil.sin(world.timeSinceStartInSeconds * 3.0, 0.25);
+			mask.rotation -= 100 * elapsed;
 		}
 	}
 }

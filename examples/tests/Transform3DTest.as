@@ -70,15 +70,15 @@ package tests {
 			}
 		}
 
-		override protected function step(elapsed:Number):void {
+		override public function step(elapsed:Number):void {
 			batchNode.x = stage.stageWidth * 0.5;
 			batchNode.y = stage.stageHeight * 0.5;
 
 			var i:uint = 0;
 
 			for(var node:Node2D = batchNode.childFirst; node; node = node.next, i++) {
-				node.rotationX = NumberUtil.sin(timeSinceStartInSeconds * 0.8, 0, 180) * (Math.floor(i / 10) % 2 ? 1 : -1);
-				node.rotationY = NumberUtil.sin(timeSinceStartInSeconds * 0.8, 0, 90) * (i % 2 ? -1 : 1);
+				node.rotationX = NumberUtil.sin(world.timeSinceStartInSeconds * 0.8, 0, 180) * (Math.floor(i / 10) % 2 ? 1 : -1);
+				node.rotationY = NumberUtil.sin(world.timeSinceStartInSeconds * 0.8, 0, 90) * (i % 2 ? -1 : 1);
 			}
 		}
 	}

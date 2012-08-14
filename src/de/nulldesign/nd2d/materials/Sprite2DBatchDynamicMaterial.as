@@ -123,6 +123,8 @@ package de.nulldesign.nd2d.materials {
 					continue;
 				}
 
+				childNode.step(elapsed);
+
 				if(childNode.invalidateUV) {
 					childNode.updateUV();
 				}

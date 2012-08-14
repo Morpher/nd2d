@@ -19,26 +19,27 @@ package tests {
 			addChild(colorQuad);
 		}
 
-		override protected function step(elapsed:Number):void {
+		override public function step(elapsed:Number):void {
 			colorQuad.x = stage.stageWidth * 0.5;
 			colorQuad.y = stage.stageHeight * 0.5;
 			colorQuad.width = stage.stageWidth;
 			colorQuad.height = stage.stageHeight;
 
 			colorQuad.topLeftColor = ColorUtil.colorWithAlphaFromColor(
-				ColorUtil.mixColors(0xFF0000, 0x00FF00, NumberUtil.sin(timeSinceStartInSeconds * 2.2)),
-				NumberUtil.sin(timeSinceStartInSeconds * 2.3));
+				ColorUtil.mixColors(0xFF0000, 0x00FF00, NumberUtil.sin(world.timeSinceStartInSeconds * 2.2)),
+				NumberUtil.sin(world.timeSinceStartInSeconds * 2.3));
 
 			colorQuad.topRightColor = ColorUtil.colorWithAlphaFromColor(
-				ColorUtil.mixColors(0x00FF00, 0x0000FF, NumberUtil.sin(timeSinceStartInSeconds * 2.4)),
-				NumberUtil.sin(timeSinceStartInSeconds * 2.5));
+				ColorUtil.mixColors(0x00FF00, 0x0000FF, NumberUtil.sin(world.timeSinceStartInSeconds * 2.4)),
+				NumberUtil.sin(world.timeSinceStartInSeconds * 2.5));
+
 			colorQuad.bottomLeftColor = ColorUtil.colorWithAlphaFromColor(
-				ColorUtil.mixColors(0xFF00FF, 0xFFFF00, NumberUtil.sin(timeSinceStartInSeconds * 2.6)),
-				NumberUtil.sin(timeSinceStartInSeconds * 2.7));
+				ColorUtil.mixColors(0xFF00FF, 0xFFFF00, NumberUtil.sin(world.timeSinceStartInSeconds * 2.6)),
+				NumberUtil.sin(world.timeSinceStartInSeconds * 2.7));
 
 			colorQuad.bottomRightColor = ColorUtil.colorWithAlphaFromColor(
-				ColorUtil.mixColors(0x00FF99, 0x9900FF, NumberUtil.sin(timeSinceStartInSeconds * 2.8)),
-				NumberUtil.sin(timeSinceStartInSeconds * 2.9));
+				ColorUtil.mixColors(0x00FF99, 0x9900FF, NumberUtil.sin(world.timeSinceStartInSeconds * 2.8)),
+				NumberUtil.sin(world.timeSinceStartInSeconds * 2.9));
 		}
 	}
 }

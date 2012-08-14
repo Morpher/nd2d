@@ -113,7 +113,7 @@ package tests {
 			s2.animation.play("up");
 		}
 
-		override protected function step(elapsed:Number):void {
+		override public function step(elapsed:Number):void {
 			super.step(elapsed);
 
 			var i:uint = 0;
@@ -122,7 +122,7 @@ package tests {
 				child.rotation += 1.0 + i++;
 			}
 
-			batchNode.x += Math.sin(timeSinceStartInSeconds) * 3.0;
+			batchNode.x += Math.sin(world.timeSinceStartInSeconds) * 3.0;
 			batchNode.rotation += 1.0;
 		}
 	}

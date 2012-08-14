@@ -94,12 +94,13 @@ package de.nulldesign.nd2d.display {
 
 		private const VERTEX_SHADER:String =
 			"alias va0, position;" +
-			"alias vc0, viewProjection;" +
-			"alias vc4, clipSpace;" +
 			"alias va1, uv;" +
 			"alias va2, uvSheet;" +
 			"alias va3, colorMultiplier;" +
 			"alias va4, colorOffset;" +
+
+			"alias vc0, viewProjection;" +
+			"alias vc4, clipSpace;" +
 
 			"temp0 = mul4x4(position, clipSpace);" +
 			"output = mul4x4(temp0, viewProjection);" +
@@ -129,6 +130,7 @@ package de.nulldesign.nd2d.display {
 
 		protected var maxCapacity:uint;
 
+		protected var elapsed:Number;
 		protected var shaderData:Shader2D;
 		protected var indexBuffer:IndexBuffer3D;
 		protected var vertexBuffer:VertexBuffer3D;
@@ -218,10 +220,12 @@ package de.nulldesign.nd2d.display {
 			child2.invalidateVisibility = true;
 		}
 
-		override internal function drawNode(context:Context3D, camera:Camera2D):void {
+		override internal function drawNode(context:Context3D, camera:Camera2D, elapsed:Number):void {
 			if(!visible) {
 				return;
 			}
+
+			step(elapsed);
 
 			if(invalidateColors) {
 				updateColors();
@@ -237,6 +241,8 @@ package de.nulldesign.nd2d.display {
 
 				invalidateMatrix = true;
 			}
+
+			this.elapsed = elapsed;
 
 			draw(context, camera);
 
@@ -280,6 +286,8 @@ package de.nulldesign.nd2d.display {
 
 			for(node = childFirst; node; node = node.next) {
 				child = node as Sprite2D;
+
+				node.step(elapsed);
 
 				if(child.invalidateUV || child.animation.frameUpdated) {
 					if(child.invalidateUV) {
@@ -436,8 +444,6 @@ package de.nulldesign.nd2d.display {
 					somethingChanged = true;
 				}
 
-				Statistics.sprites++;
-
 				vIdx += numFloatsPerVertex * 4;
 
 				child.invalidateUV = false;
@@ -450,33 +456,33 @@ package de.nulldesign.nd2d.display {
 				currentUsesColorOffset = currentUsesColorOffset || child.usesColorOffset;
 			}
 
-			if(!vertexBuffer) {
-				vertexBuffer = context.createVertexBuffer(mVertexBuffer.length / numFloatsPerVertex, numFloatsPerVertex);
-			}
-
-			// upload changed vertexBuffer
 			if(somethingChanged) {
-				vertexBuffer.uploadFromVector(mVertexBuffer, 0, mVertexBuffer.length / numFloatsPerVertex);
-			}
-
-			if(!indexBuffer) {
-				var i:uint = 0;
-				var idx:uint = 0;
-				var refIdx:uint = 0;
-
-				while(i++ < maxCapacity) {
-					mIndexBuffer[idx++] = refIdx;
-					mIndexBuffer[idx++] = refIdx + 1;
-					mIndexBuffer[idx++] = refIdx + 2;
-					mIndexBuffer[idx++] = refIdx + 2;
-					mIndexBuffer[idx++] = refIdx + 3;
-					mIndexBuffer[idx++] = refIdx;
-
-					refIdx += 4;
+				if(!vertexBuffer) {
+					vertexBuffer = context.createVertexBuffer(mVertexBuffer.length / numFloatsPerVertex, numFloatsPerVertex);
 				}
 
-				indexBuffer = context.createIndexBuffer(mIndexBuffer.length);
-				indexBuffer.uploadFromVector(mIndexBuffer, 0, mIndexBuffer.length);
+				// upload changed vertexBuffer
+				vertexBuffer.uploadFromVector(mVertexBuffer, 0, mVertexBuffer.length / numFloatsPerVertex);
+
+				if(!indexBuffer) {
+					var i:uint = 0;
+					var idx:uint = 0;
+					var refIdx:uint = 0;
+
+					while(i++ < maxCapacity) {
+						mIndexBuffer[idx++] = refIdx;
+						mIndexBuffer[idx++] = refIdx + 1;
+						mIndexBuffer[idx++] = refIdx + 2;
+						mIndexBuffer[idx++] = refIdx + 2;
+						mIndexBuffer[idx++] = refIdx + 3;
+						mIndexBuffer[idx++] = refIdx;
+
+						refIdx += 4;
+					}
+
+					indexBuffer = context.createIndexBuffer(mIndexBuffer.length);
+					indexBuffer.uploadFromVector(mIndexBuffer, 0, mIndexBuffer.length);
+				}
 			}
 
 			if(currentUsesUV != lastUsesUV || currentUsesColor != lastUsesColor || currentUsesColorOffset != lastUsesColorOffset) {
@@ -508,6 +514,7 @@ package de.nulldesign.nd2d.display {
 			}
 
 			context.setTextureAt(0, texture.getTexture(context));
+
 			context.setBlendFactors(blendMode.src, blendMode.dst);
 
 			context.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 0, camera.getViewProjectionMatrix(false), true);
@@ -516,6 +523,7 @@ package de.nulldesign.nd2d.display {
 			context.drawTriangles(indexBuffer, 0, childCount << 1);
 
 			Statistics.drawCalls++;
+			Statistics.sprites += childCount;
 			Statistics.triangles += (childCount << 1);
 
 			context.setTextureAt(0, null);
@@ -525,6 +533,7 @@ package de.nulldesign.nd2d.display {
 			context.setVertexBufferAt(2, null);
 			context.setVertexBufferAt(3, null);
 			context.setVertexBufferAt(4, null);
+
 			context.setScissorRectangle(null);
 		}
 

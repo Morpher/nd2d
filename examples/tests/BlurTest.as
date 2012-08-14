@@ -77,7 +77,7 @@ package tests {
 			sprite2.setMaterial(blurMaterial2);
 		}
 
-		override protected function step(elapsed:Number):void {
+		override public function step(elapsed:Number):void {
 			super.step(elapsed);
 
 			sprite.x = camera.sceneWidth * 0.5 - sprite.width;
@@ -87,7 +87,7 @@ package tests {
 			sprite2.x = camera.sceneWidth * 0.5 + sprite2.width;
 			sprite2.y = camera.sceneHeight * 0.5;
 
-			var blur:Number = NumberUtil.sin(timeSinceStartInSeconds * 5.0, 0.0, 20.0);
+			var blur:Number = NumberUtil.sin(world.timeSinceStartInSeconds * 5.0, 0.0, 20.0);
 			blurMaterial.setBlur(blur, blur);
 
 			var blurX:Number = (stage.mouseX / stage.stageWidth) * 20.0;

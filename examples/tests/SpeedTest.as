@@ -81,8 +81,6 @@ package tests {
 		private function addedToStage(e:Event):void {
 			removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 
-			Style.LABEL_TEXT = 0x000000;
-
 			comboBox = new ComboBox(stage, 0, 130, "- Select -", [
 				"Sprite2D (static)",
 				"   Sprite2D (animated)",
@@ -182,12 +180,12 @@ package tests {
 			}
 		}
 
-		override protected function step(elapsed:Number):void {
+		override public function step(elapsed:Number):void {
 			super.step(elapsed);
 
 			// camera movement comes for "free", keep that in mind! it's
 			// faster to move the camera instead of hundreds of sprites
-			camera.x = Math.cos(timeSinceStartInSeconds) * 50;
+			camera.x = Math.cos(world.timeSinceStartInSeconds) * 50;
 
 			if(Statistics.fps >= stage.frameRate) {
 				var sprite:Sprite2D;

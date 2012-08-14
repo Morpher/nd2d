@@ -102,7 +102,7 @@ package tests {
 			addSpritesButton = new PushButton(stage, 0.0, 150.0, "addChild", addSpritesClick);
 		}
 
-		override protected function step(elapsed:Number):void {
+		override public function step(elapsed:Number):void {
 			var s:Sprite2D;
 			var vxabs:Number;
 			var vyabs:Number;
@@ -157,7 +157,6 @@ package tests {
 
 			spriteCloud = null;
 		}
-
 	}
 }
 

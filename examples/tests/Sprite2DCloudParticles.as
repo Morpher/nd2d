@@ -52,7 +52,7 @@ package tests {
 			addChild(spriteCloud);
 		}
 
-		override protected function step(elapsed:Number):void {
+		override public function step(elapsed:Number):void {
 			for(var child:Node2D = spriteCloud.childFirst; child; child = child.next) {
 				child.x += child.vx;
 				child.y += child.vy;

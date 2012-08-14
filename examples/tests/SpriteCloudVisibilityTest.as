@@ -54,7 +54,7 @@ package tests {
 			addChild(trackCloud);
 		}
 
-		override protected function step(elapsed:Number):void {
+		override public function step(elapsed:Number):void {
 			var n:int = (mouseX / stage.stageWidth) * MAX_TRACK_POINTS;
 
 			if(n > MAX_TRACK_POINTS) {

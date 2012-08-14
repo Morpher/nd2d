@@ -180,7 +180,7 @@ package de.nulldesign.nd2d.display {
 			lastParticleDeathTime = Math.max(startTime + life, lastParticleDeathTime);
 		}
 
-		override protected function step(elapsed:Number):void {
+		override public function step(elapsed:Number):void {
 			currentTime = getTimer() - startTime;
 
 			if(activeParticles < maxCapacity) {
@@ -221,6 +221,7 @@ package de.nulldesign.nd2d.display {
 			}
 
 			preset = null;
+			gravity = null;
 			faceList = null;
 			particles = null;
 

@@ -107,7 +107,7 @@ package tests {
 			targetNode = Node2D(e.target);
 		}
 
-		override protected function step(elapsed:Number):void {
+		override public function step(elapsed:Number):void {
 			back.x = camera.sceneWidth * 0.5;
 			back.y = camera.sceneHeight * 0.5;
 			back.width = camera.sceneWidth * 5.0;

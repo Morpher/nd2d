@@ -100,8 +100,8 @@ package tests {
 				for(i = 0; i < 50; i++) {
 					sprite = new Sprite2D(tex);
 
-					sprite.x = NumberUtil.random(-100, 100);
-					sprite.y = NumberUtil.random(-100, 100);
+					sprite.x = int(NumberUtil.random(-100, 100));
+					sprite.y = int(NumberUtil.random(-100, 100));
 					sprite.animation.play("blah", Math.random() * 100);
 
 					if(node is Sprite2DBatch) {
@@ -119,11 +119,13 @@ package tests {
 			// control panel
 			panel = new Sprite();
 			panel.y = 280.0;
-			panel.graphics.beginFill(0x000000, 1.0);
-			panel.graphics.drawRect(0.0, 0.0, 180.0, 80.0);
+			panel.graphics.beginFill(0x000000, 0.6);
+			panel.graphics.drawRoundRect(0, 0, 180, 80, 10);
 			panel.graphics.endFill();
 
-			Style.LABEL_TEXT = 0xFFFFFF;
+			var oldStyle:uint = Style.LABEL_TEXT;
+
+			Style.LABEL_TEXT = 0xffffff;
 
 			var slider:HUISlider;
 
@@ -143,14 +145,16 @@ package tests {
 			slider.setSliderParams(1, 200, 100);
 			sliders.push(slider);
 
+			Style.LABEL_TEXT = oldStyle;
+
 			stage.addChild(panel);
 		}
 
 		private function changeHandler(e:Event):void {
 			for(var node:Node2D = childFirst; node; node = node.next) {
 				var scrollRect:Rectangle = node.scrollRect.clone();
-				scrollRect.x = sliders[0].value;
-				scrollRect.y = sliders[1].value;
+				scrollRect.x = int(sliders[0].value);
+				scrollRect.y = int(sliders[1].value);
 				scrollRect.width = sliders[2].value;
 				scrollRect.height = sliders[3].value;
 

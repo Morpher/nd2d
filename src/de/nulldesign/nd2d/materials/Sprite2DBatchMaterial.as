@@ -88,6 +88,7 @@ package de.nulldesign.nd2d.materials {
 
 		private var programConstants:Vector.<Number> = new Vector.<Number>(4 * constantsPerSprite * BATCH_SIZE, true);
 
+		public var elapsed:Number;
 		public var camera:Camera2D;
 
 		public static const VERTEX_IDX:String = "PB3D_IDX";
@@ -195,6 +196,8 @@ package de.nulldesign.nd2d.materials {
 				if(!childNode.visible) {
 					continue;
 				}
+
+				childNode.step(elapsed);
 
 				if(childNode.invalidateUV) {
 					childNode.updateUV();

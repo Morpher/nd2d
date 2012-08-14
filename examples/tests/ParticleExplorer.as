@@ -78,15 +78,17 @@ package tests {
 			removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 
 			panel = new Sprite();
-			panel.graphics.beginFill(0x000000, 1.0);
-			panel.graphics.drawRect(0, 0, 200, 450);
+			panel.graphics.beginFill(0x000000, 0.6);
+			panel.graphics.drawRoundRect(0, 0, 200, 470, 10);
 			panel.graphics.endFill();
 
 			var s:HUISlider;
 			var c:ColorChooser;
 			var nextY:Number = 5;
 
-			Style.LABEL_TEXT = 0xFFFFFF;
+			var oldStyle:uint = Style.LABEL_TEXT;
+
+			Style.LABEL_TEXT = 0xffffff;
 
 			s = new HUISlider(panel, 0, nextY, "minStartX", changeHandler);
 			s.minimum = -stage.stageWidth / 2;
@@ -214,6 +216,8 @@ package tests {
 
 			var check:CheckBox = new CheckBox(panel, 10, nextY, "burst", changeHandler);
 
+			Style.LABEL_TEXT = oldStyle;
+
 			stage.addChild(panel);
 		}
 
@@ -340,7 +344,7 @@ package tests {
 			timer.stop();
 		}
 
-		override protected function step(t:Number):void {
+		override public function step(t:Number):void {
 			particles.x = stage.stageWidth / 2;
 			particles.y = stage.stageHeight / 2;
 			particles.gravity.x = (stage.mouseX / stage.stageWidth * 2.0 - 1.0) * 2000.0;

@@ -99,7 +99,7 @@ package tests {
 			particles.reset();
 		}
 
-		override protected function step(elapsed:Number):void {
+		override public function step(elapsed:Number):void {
 			particles.x = stage.stageWidth / 2.0;
 			particles.y = stage.stageHeight - 50.0;
 		}

@@ -67,7 +67,7 @@ package tests {
 			trace("anim finished", ++animCount);
 		}
 
-		override protected function step(elapsed:Number):void {
+		override public function step(elapsed:Number):void {
 			s.x = stage.stageWidth / 2;
 			s.y = stage.stageHeight / 2;
 

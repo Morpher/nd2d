@@ -108,7 +108,7 @@ package tests {
 			}
 		}
 
-		override protected function step(elapsed:Number):void {
+		override public function step(elapsed:Number):void {
 			var p:Number;
 			var r:uint;
 			var g:uint;
@@ -178,6 +178,5 @@ package tests {
 				perlinBmp = null;
 			}
 		}
-
 	}
 }

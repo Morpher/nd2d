@@ -113,7 +113,7 @@ package tests {
 			s2.y = 20.0;
 		}
 
-		override protected function step(elapsed:Number):void {
+		override public function step(elapsed:Number):void {
 			super.step(elapsed);
 
 			var i:uint = 0;

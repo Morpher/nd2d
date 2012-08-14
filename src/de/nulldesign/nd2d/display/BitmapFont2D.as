@@ -85,7 +85,7 @@ package de.nulldesign.nd2d.display {
 			new TextureSheet(fontTexture, charWidth, charHeight);
 		}
 
-		override protected function step(elapsed:Number):void {
+		override public function step(elapsed:Number):void {
 			if(textChanged) {
 				textChanged = false;
 

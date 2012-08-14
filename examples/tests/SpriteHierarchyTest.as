@@ -124,7 +124,7 @@ package tests {
 		 */
 		}
 
-		override protected function step(elapsed:Number):void {
+		override public function step(elapsed:Number):void {
 			/*
 			   camera.x = 50;
 			   camera.rotation = 30;

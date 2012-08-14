@@ -117,12 +117,14 @@ package de.nulldesign.nd2d.display {
 			return super.addChild(child);
 		}
 
-		override internal function drawNode(context:Context3D, camera:Camera2D):void {
+		override internal function drawNode(context:Context3D, camera:Camera2D, elapsed:Number):void {
 			if(!visible) {
 				return;
 			}
 
 			// can't use UV on the container
+
+			step(elapsed);
 
 			if(invalidateColors) {
 				updateColors();
@@ -137,6 +139,8 @@ package de.nulldesign.nd2d.display {
 
 				invalidateMatrix = true;
 			}
+
+			material.elapsed = elapsed;
 
 			draw(context, camera);
 
