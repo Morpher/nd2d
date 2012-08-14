@@ -37,10 +37,13 @@ package de.nulldesign.nd2d.materials.texture.parser {
 
 	public class ParserSparrow extends ParserBase {
 
-		public function ParserSparrow() {
+		public var xmlData:XML;
+
+		public function ParserSparrow(xmlData:XML) {
+			this.xmlData = xmlData;
 		}
 
-		override public function parse(texture:Texture2D, xmlData:XML):void {
+		override public function parse(texture:Texture2D):void {
 			if(!xmlData.SubTexture) {
 				throw new Error("Unrecognised XML Format");
 			}
@@ -78,6 +81,12 @@ package de.nulldesign.nd2d.materials.texture.parser {
 					offsets.push(new Point());
 				}
 			}
+		}
+
+		override public function dispose():void {
+			xmlData = null;
+
+			super.dispose();
 		}
 	}
 }

@@ -72,10 +72,10 @@ package tests {
 			//sheet.addAnimation("blah", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], true, 5);
 
 			//var atlasTex:Texture2D = Texture2D.textureFromBitmapData(new textureAtlasBitmap().bitmapData);
-			//var atlas:TextureAtlas = new TextureAtlas(atlasTex, new XML(new textureAtlasXML()));
+			//var atlas:TextureAtlas = new TextureAtlas(atlasTex, new ParserTexturePacker(XML(new textureAtlasXML())));
 
 			var atlasTex:Texture2D = Texture2D.textureFromBitmapData(new textureAtlasBitmapZwoptex().bitmapData);
-			var atlas:TextureAtlas = new TextureAtlas(atlasTex, new XML(new textureAtlasXMLZwoptex()), new ParserZwopTex());
+			var atlas:TextureAtlas = new TextureAtlas(atlasTex, new ParserZwopTex(XML(new textureAtlasXMLZwoptex())));
 
 			atlas.addAnimation("blah", ["c*", "b*"], true, 5);
 

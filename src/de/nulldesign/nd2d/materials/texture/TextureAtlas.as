@@ -40,25 +40,23 @@ package de.nulldesign.nd2d.materials.texture {
 		 * texture.
 		 *
 		 * @param texture
-		 * @param xmlData		XML() object to be parsed
-		 * @param xmlParser		If unset ParserTexturePacker() is used, alternatives
-		 * ParserZwopTex(), ParserSparrow(), ...
+		 * @param parser		ParserTexturePacker(), ParserZwopTex(), ParserSparrow(),
+		 * ...
 		 * @param distribute	If true, applies this atlas to the texture
 		 */
-		public function TextureAtlas(texture:Texture2D, xmlData:XML, xmlParser:ParserBase = null, distribute:Boolean = true) {
-			if(texture && xmlData) {
-				if(!xmlParser) {
-					xmlParser = new ParserTexturePacker();
-				}
+		public function TextureAtlas(texture:Texture2D, parser:ParserBase, distribute:Boolean = true) {
+			if(texture) {
+				parser.parse(texture);
 
-				xmlParser.parse(texture, xmlData);
+				frames = parser.frames;
+				offsets = parser.offsets;
+				uvRects = parser.uvRects;
+				customData = parser.customData;
 
-				frames = xmlParser.frames;
-				offsets = xmlParser.offsets;
-				uvRects = xmlParser.uvRects;
+				frameNames = parser.frameNames;
+				frameNameToIndex = parser.frameNameToIndex;
 
-				frameNames = xmlParser.frameNames;
-				frameNameToIndex = xmlParser.frameNameToIndex;
+				parser.dispose();
 
 				// distribute to texture
 				if(distribute) {
@@ -70,12 +68,12 @@ package de.nulldesign.nd2d.materials.texture {
 		/**
 		 * Adds a new animation to this atlas.
 		 *
-		 * <p>Frame names support wildcards with <em>*</em> (asterisk) and
-		 * <em>?</em> (question mark) to match multiple frames. If more complexity
-		 * is required, pass a RegExp() object instead of the String. Frame
-		 * order is as defined by XML, no sort is applied.</p>
+		 * <p>Frame names support wildcards with <code>~~</code> (asterisk) and
+		 * <code>?</code> (question mark) to match multiple frames. If more
+		 * complexity is required, pass a RegExp() object instead of the
+		 * String. Frame order is as defined by XML, no sort is applied.</p>
 		 *
-		 * <pre>
+		 * <listing>
 		 * // integer
 		 * atlas.addAnimation("shoot", [4, 5, 6, 5, 6, 7]);
 		 *
@@ -84,7 +82,7 @@ package de.nulldesign.nd2d.materials.texture {
 		 *
 		 * // integer, regexp and string mix
 		 * atlas.addAnimation("run", [12, /^run.*$/, "walk_stand"]);
-		 * </pre>
+		 * </listing>
 		 *
 		 * @param name			Animation name
 		 * @param keyFrames		Integer, String or RegExp() array - can be mixed

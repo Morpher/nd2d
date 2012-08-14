@@ -37,10 +37,13 @@ package de.nulldesign.nd2d.materials.texture.parser {
 
 	public class ParserZwopTex extends ParserBase {
 
-		public function ParserZwopTex() {
+		public var xmlData:XML;
+
+		public function ParserZwopTex(xmlData:XML) {
+			this.xmlData = xmlData;
 		}
 
-		override public function parse(texture:Texture2D, xmlData:XML):void {
+		override public function parse(texture:Texture2D):void {
 			var metadata:XML = getDict("metadata", xmlData);
 
 			if(!metadata) {
@@ -131,6 +134,12 @@ package de.nulldesign.nd2d.materials.texture.parser {
 					}
 				}
 			}
+		}
+
+		override public function dispose():void {
+			xmlData = null;
+
+			super.dispose();
 		}
 	}
 }

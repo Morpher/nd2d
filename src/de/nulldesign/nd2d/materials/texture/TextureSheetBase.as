@@ -43,6 +43,8 @@ package de.nulldesign.nd2d.materials.texture {
 		public var offsets:Vector.<Point>;
 		public var uvRects:Vector.<Rectangle>;
 
+		public var customData:*;
+
 		public var animationMap:Dictionary = new Dictionary();
 
 		public var frameNames:Array;
@@ -77,6 +79,7 @@ package de.nulldesign.nd2d.materials.texture {
 			frames = null;
 			offsets = null;
 			uvRects = null;
+			customData = null;
 
 			frameNames = null;
 			animationMap = null;

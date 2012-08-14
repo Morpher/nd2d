@@ -37,10 +37,13 @@ package de.nulldesign.nd2d.materials.texture.parser {
 
 	public class ParserTexturePacker extends ParserBase {
 
-		public function ParserTexturePacker() {
+		public var xmlData:XML;
+
+		public function ParserTexturePacker(xmlData:XML) {
+			this.xmlData = xmlData;
 		}
 
-		override public function parse(texture:Texture2D, xmlData:XML):void {
+		override public function parse(texture:Texture2D):void {
 			var metadata:XML = getDict("metadata", xmlData);
 
 			if(!metadata) {
@@ -137,31 +140,12 @@ package de.nulldesign.nd2d.materials.texture.parser {
 					}
 				}
 			}
+		}
 
-		/*
-		   Frame:
-		   Top-Left originating rectangle of the sprite's pixel texture
-		   coordinates. Cocos2'd will convert these to UV coordinates (0-1)
-		   when loading based on the texture size.
+		override public function dispose():void {
+			xmlData = null;
 
-		   Offset:
-		   Zwoptex trim's transparency off sprites. Because of this sprite's need
-		   to be offset to ensure their texture is drawn in correct alignment
-		   to their original size.
-
-		   Source Color Rect:
-		   This is the Top-Left originating rectangle that is the valid pixel data
-		   of the sprite. Say you have a 512x512 sprite that only has 10x10
-		   pixels of data inside of it located at 500x500. The source color
-		   rect could be {500,500,10,10}.
-
-		   Format:
-		   Version number related to what version of Zwoptex was used so cocos2d
-		   knows how to parse the plist properly.
-		   Flash Version: 0
-		   Desktop Version 0-0.4b: 1
-		   Desktop Version 1.x: 2
-		 */
+			super.dispose();
 		}
 	}
 }

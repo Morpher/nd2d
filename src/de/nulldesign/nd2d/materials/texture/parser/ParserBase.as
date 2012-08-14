@@ -42,6 +42,8 @@ package de.nulldesign.nd2d.materials.texture.parser {
 		public var offsets:Vector.<Point> = new Vector.<Point>();
 		public var uvRects:Vector.<Rectangle> = new Vector.<Rectangle>();
 
+		public var customData:*;
+
 		public var frameNames:Array = [];
 		public var frameNameToIndex:Dictionary = new Dictionary();
 
@@ -79,8 +81,17 @@ package de.nulldesign.nd2d.materials.texture.parser {
 			return null;
 		}
 
-		public function parse(texture:Texture2D, xmlData:XML):void {
+		public function parse(texture:Texture2D):void {
 			// override this
+		}
+
+		public function dispose():void {
+			frames = null;
+			offsets = null;
+			uvRects = null;
+			customData = null;
+			frameNames = null;
+			frameNameToIndex = null;
 		}
 	}
 }
